@@ -4,6 +4,8 @@ import (
 	"paranoid_android/exporters"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -18,5 +20,6 @@ func main() {
 		exporters.ExportIssueArticle(ctx, C)
 	})
 
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.Run(":8080")
 }

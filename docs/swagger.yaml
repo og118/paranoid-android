@@ -1,0 +1,75 @@
+info:
+  contact: {}
+paths:
+  /export/issue/{issue_id}:
+    get:
+      consumes:
+      - application/json
+      description: Export an issue to EPUB format
+      parameters:
+      - description: Email address to send the EPUB file
+        in: query
+        name: mail_to
+        type: string
+      - description: Issue ID
+        in: path
+        name: issue_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Issue exported successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Export an issue
+      tags:
+      - Exporters
+  /export/issue/{issue_id}/article/{article_id}:
+    get:
+      consumes:
+      - application/json
+      description: Export an issue to EPUB format
+      parameters:
+      - description: Email address to send the EPUB file
+        in: query
+        name: mail_to
+        type: string
+      - description: Issue ID
+        in: path
+        name: issue_id
+        required: true
+        type: string
+      - description: Article ID
+        in: path
+        name: article_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Issue exported successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Export an issue article
+      tags:
+      - Exporters
+swagger: "2.0"

@@ -7,6 +7,8 @@ import (
 	"paranoid_android/utils"
 	"strings"
 
+	_ "paranoid_android/docs"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-shiori/go-epub"
 	"github.com/gocolly/colly/v2"
@@ -16,6 +18,20 @@ const (
 	CLARKESWORLD_BASE_URL = "https://clarkesworldmagazine.com/"
 )
 
+// @Basepath /export
+
+// ExportIssue godoc
+// @Summary Export an issue
+// @Description Export an issue to EPUB format
+// @Tags Exporters
+// @Accept json
+// @Produce json
+// @Param mail_to query string false "Email address to send the EPUB file"
+// @Param issue_id path string true "Issue ID"
+// @Success 200 {string} string "Issue exported successfully"
+// @Failure 400 {string} string "Bad request"
+// @Failure 500 {string} string "Internal server error"
+// @Router /export/issue/{issue_id} [get]
 func ExportIssue(c *gin.Context, C *colly.Collector) {
 	mailTo := c.Query("mail_to")
 	issueID := c.Param("issue_id")
@@ -114,4 +130,13 @@ func ExportIssue(c *gin.Context, C *colly.Collector) {
 		c.Abort()
 	}
 	utils.SendMail(mailTo, buf.Bytes(), "Clarkesworld Magazine: Issue "+issueID+".epub")
+	err = utils.SendMail(mailTo,
+		buf.Bytes(),
+		"Clarkesworld Magazine: Issue "+issueID+".epub")
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{"error": "Failed to send mail"})
+		c.Abort()
+	}
+	c.JSON(200, gin.H{"message": "Article sent to your mail"})
 }
